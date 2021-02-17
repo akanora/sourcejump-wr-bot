@@ -1,2 +1,2 @@
 # sourcejump-wr-bot
-https://imgur.com/ewbNlMN
+![Example](https://imgur.com/ewbNlMN)
