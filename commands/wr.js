@@ -6,16 +6,16 @@ module.exports = {
     name: 'wr',
     aliases: ['top', 'worldrecord'],
     cooldown: 2.5,
-    description: 'osutop!',
+    description: 'wr',
     args: false,
-    usage: '<map> <playnumber>',
+    usage: '<map> <rank>',
     guildOnly: true,
     permissions: false,
     async execute(message, args) {
         //my stupid way to get username
         try {
             if (!args[0]) {
-                return message.channel.send("Please specify a map. Usage: !wr <map> <playnumber>")
+                return message.channel.send("Please specify a map. Usage: !wr <map> <rank>")
             } else {
                 map = args[0]
             }
@@ -27,7 +27,7 @@ module.exports = {
             promises.push(api.get_wr(map))
             Promise.all(promises).then(resp => {
                 resp.forEach(getwr => {
-                    if(!args[1]) {
+                    if (!args[1]) {
                         i = 0
                     } else {
                         i = args[1] - 1
@@ -37,10 +37,10 @@ module.exports = {
                     if (getwr[i]["country"] === null) {
                         countryflagicon = "https://cdn.discordapp.com/attachments/780490774251962379/811652581646532638/level6969.png"
                     } else {
-                        countryflagicon = "https://www.countryflags.io/" + getwr[i]["country"] + "/flat/64.png";
+                        countryflagicon = "https://countryflagsapi.com/png/" + getwr[i]["country"];
                     }
-                    username =  getwr[i]["name"]
-                    mapname = getwr[i]["map"] 
+                    username = getwr[i]["name"]
+                    mapname = getwr[i]["map"]
                     tier = getwr[i]["tier"]
                     time = getwr[i]["time"]
                     sync = getwr[i]["sync"]
@@ -63,13 +63,23 @@ module.exports = {
         try {
             let username = await promise
             api.get_avatar(sid.getSteamID64()).then(avatar => {
-                embed = new Discord.MessageEmbed().setAuthor(`SourceJump #${i + 1} for ` + `${map}`, countryflagicon, steamlink).setThumbnail(avatar)	.addFields(
-                    { name: '**Username**', value: `[${username}](${steamlink})`, inline: true},
-                    { name: '**Time**', value: `${time}`, inline: true },
-                    { name: 'Additional', value: `**Sync:** ${sync} **Strafes:** ${strafe} **Jumps:** ${jump}\n**Date:** ${date}\n**Run ID:** [${runid}](https://www.sourcejump.net/records/id/${runid})`, },
-                    { name: 'Server', value: `${server}` }
-                ).setColor(message.member.displayHexColor).setFooter('SourceJump.net', 'https://cdn.discordapp.com/icons/333865962568941568/9fd5ab996f4d80f38cacbe4b0e89a0ac.webp?size=2048');
-                console.log(`WR Command ms: ${Date.now() - message.createdTimestamp}`)
+                embed = new Discord.MessageEmbed().setAuthor(`SourceJump #${i + 1} for ` + `${map}`, countryflagicon, steamlink).setThumbnail(avatar).addFields({
+                        name: '**Username**',
+                        value: `[${username}](${steamlink})`,
+                        inline: true
+                    }, {
+                        name: '**Time**',
+                        value: `${time}`,
+                        inline: true
+                    }, {
+                        name: 'Additional',
+                        value: `**Sync:** ${sync} **Strafes:** ${strafe} **Jumps:** ${jump}\n**Date:** ${date}\n**Run ID:** [${runid}](https://www.sourcejump.net/records/id/${runid})`,
+                    }, {
+                        name: 'Server',
+                        value: `${server}`
+                    })
+                    .setColor(message.member.displayHexColor)
+                    .setFooter('SourceJump.net', 'https://cdn.discordapp.com/icons/333865962568941568/cb2c94fee27c157485014f9e10d1ba26.webp?size=2048');
                 message.channel.send(embed);
             })
         } catch (err) {
