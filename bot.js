@@ -1,7 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const config = require('./jsons/configs.json');
-const prefixes = require("./jsons/prefixes.json")
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
