@@ -19,12 +19,7 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
-    let prefix;
-    try {
-        prefix = prefixes[message.guild.id].prefix
-    } catch {
-        prefix = config.prefix
-    }
+    prefix = config.prefix
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
